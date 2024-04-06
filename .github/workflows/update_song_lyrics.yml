@@ -17,7 +17,7 @@ jobs:
     steps:
       # Step 2: Install dependencies in requirements.txt
       - name: Install dependencies
-        run: pip install -r requirements.txt
+        run: pip install -r ${{ github.workspace }}/requirements.txt
 
       # Step 3: Download from Google Drive
       - name: Download from Google Drive
