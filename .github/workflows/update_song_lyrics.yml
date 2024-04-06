@@ -1,0 +1,40 @@
+name: Scheduled update of song lyrics daily
+
+# This workflow will trigger every day at midnight (UTC). 
+# To adjust the schedule, modify the cron expression.
+on:
+  schedule:
+    - cron: '0 0 * * *'
+
+jobs:
+  sync-with-drive:
+    runs-on: ubuntu-latest
+    steps:
+      # Step 1: Check out your repository
+      - uses: actions/checkout@v3
+      # Step 2: Install dependencies in requirements.txt
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      # Step 3: Download from Google Drive
+      - name: Download from Google Drive
+        uses: satackey/action-google-drive-download@v3
+        with:
+          file_id: 'replace_with_your_google_drive_file_id' 
+          destination: './Dedupe_Pooled_Database_2023_curated.db' # Adjust the path if needed
+
+      # Step 4: (Optional) Modify the downloaded file
+      - name: Process the downloaded file
+        run: ./convert_sql2docx.py
+
+      # Step 5: Upload to Google Drive 
+      - name: Upload to Google Drive 
+        uses: skz29/google-drive-upload-git-action@v1.2
+        with:
+          folder_id: 'replace_with_your_google_drive_folder_id' 
+          file_paths: './downloaded_file' # Or the path to the modified file
+
+      # **IMPORTANT: Set up secrets**
+      # You'll need to create secrets in your repository's settings to store 
+      # sensitive credentials for Google Drive authentication. 
+      # Refer to the documentation of the individual actions for details.
