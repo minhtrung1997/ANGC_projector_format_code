@@ -23,7 +23,7 @@ jobs:
 
       # Step 3: Download from Google Drive
       - name: Download from Google Drive
-        uses: satackey/action-google-drive-download@v3
+        uses: satackey/action-google-drive@v1
         with:
           skicka-tokencache-json: ${{ secrets.SKICKA_TOKENCACHE_JSON }}
           download-from: '/EasyslidesData/Admin/Databases/' 
@@ -35,7 +35,7 @@ jobs:
 
       # Step 5: Upload to Google Drive 
       - name: Upload to Google Drive 
-        uses: satackey/action-google-drive-download@v3
+        uses: satackey/action-google-drive@v1
         with:
           skicka-tokencache-json: ${{ secrets.SKICKA_TOKENCACHE_JSON }}
           upload-from: '${{ github.workspace }}' 
