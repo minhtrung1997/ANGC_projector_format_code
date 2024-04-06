@@ -1,13 +1,13 @@
 name: Scheduled update of song lyrics daily
 
-# This workflow will trigger every 5 minutes.
+# This workflow will trigger every 1 hour.
 # To adjust the schedule, modify the cron expression.
 on:
   push:
     branches:
       - main
   schedule:
-    - cron: '*/30 * * * *'
+    - cron: '*0 * * * *'
 
 jobs:
   update_song_lyrics:
