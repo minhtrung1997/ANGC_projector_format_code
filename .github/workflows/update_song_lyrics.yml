@@ -1,14 +1,16 @@
 name: Scheduled update of song lyrics daily
 
-# This workflow will trigger every day at midnight (UTC). 
+# This workflow will trigger every 5 minutes.
 # To adjust the schedule, modify the cron expression.
 on:
   schedule:
-    - cron: '0 0 * * *'
+    cron: '*/5 * * * *'
 
 jobs:
-  sync-with-drive:
+  update_song_lyrics:
     runs-on: ubuntu-latest
+    container:
+      image: python:3.8
     steps:
       # Step 1: Check out your repository
       - uses: actions/checkout@v3
@@ -20,19 +22,21 @@ jobs:
       - name: Download from Google Drive
         uses: satackey/action-google-drive-download@v3
         with:
-          file_id: 'replace_with_your_google_drive_file_id' 
-          destination: './Dedupe_Pooled_Database_2023_curated.db' # Adjust the path if needed
+          skicka-tokencache-json: ${{ secrets.SKICKA_TOKENCACHE_JSON }}
+          download-from: '/EasyslidesData/Admin/Databases/' 
+          download-to: '${{ github.workspace }}' # Adjust the path if needed
 
       # Step 4: (Optional) Modify the downloaded file
       - name: Process the downloaded file
-        run: ./convert_sql2docx.py
+        run: cd ${{ github.workspace }} && python convert_sql2docx.py
 
       # Step 5: Upload to Google Drive 
       - name: Upload to Google Drive 
-        uses: skz29/google-drive-upload-git-action@v1.2
+        uses: satackey/action-google-drive-download@v3
         with:
-          folder_id: 'replace_with_your_google_drive_folder_id' 
-          file_paths: './downloaded_file' # Or the path to the modified file
+          skicka-tokencache-json: ${{ secrets.SKICKA_TOKENCACHE_JSON }}
+          upload-from: '${{ github.workspace }}' 
+          upload-to: '/ARCHIVED/test_github_action/' # Or the path to the modified file
 
       # **IMPORTANT: Set up secrets**
       # You'll need to create secrets in your repository's settings to store 
