@@ -7,7 +7,7 @@ import docx
 import sqlite3
 from local_function import convert_contents
 
-conn = sqlite3.connect('Dedupe_Pooled_Database_2023_curated.db')
+conn = sqlite3.connect('download_db/Dedupe_Pooled_Database_2023_curated.db')
 
 sql_query = pd.read_sql_query('''
                                SELECT
@@ -57,5 +57,5 @@ for i in range(len(df)):
     
     doc.add_paragraph()
 
-doc.save('Danh sách bài hát ANGC.docx')
+doc.save('output/Danh sách bài hát ANGC.docx')
 

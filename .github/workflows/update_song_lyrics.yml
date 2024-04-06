@@ -19,7 +19,7 @@ jobs:
       - uses: actions/checkout@v3
       # Step 2: Install dependencies in requirements.txt
       - name: Install dependencies
-        run: cd ${GITHUB_WORKSPACE} && pip install -r requirements.txt
+        run: pip install -r requirements.txt
 
       # Step 3: Download from Google Drive
       - name: Download from Google Drive
@@ -27,21 +27,20 @@ jobs:
         with:
           skicka-tokencache-json: ${{ secrets.SKICKA_TOKENCACHE_JSON }}
           download-from: '/EasyslidesData/Admin/Databases/' 
-          download-to: '${GITHUB_WORKSPACE}' # Adjust the path if needed
+          download-to: './download_db/'
           google-client-id: ${{ secrets.GOOGLE_CLIENT_ID }}
           google-client-secret: ${{ secrets.GOOGLE_CLIENT_SECRET }}
 
       # Step 4: Modify the downloaded file
       - name: Process the downloaded file
         run: python convert_sql2docx.py
-      - name: ls the workspace files
-        run: ls .
 
       # Step 5: Upload to Google Drive 
       - name: Upload to Google Drive 
         uses: satackey/action-google-drive@v1
         with:
           skicka-tokencache-json: ${{ secrets.SKICKA_TOKENCACHE_JSON }}
+          upload-from: './output/'
           upload-to: '/ARCHIVED/test_github_action/' # Or the path to the modified file
           google-client-id: ${{ secrets.GOOGLE_CLIENT_ID }}
           google-client-secret: ${{ secrets.GOOGLE_CLIENT_SECRET }}
