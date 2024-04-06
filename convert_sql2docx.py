@@ -56,6 +56,9 @@ for i in range(len(df)):
     hdr_cells[1].text = df['content2'][i]
     
     doc.add_paragraph()
-
+# make sure the output folder exists
+import os
+if not os.path.exists('output'):
+    os.makedirs('output')
 doc.save('output/Danh sách bài hát ANGC.docx')
 
