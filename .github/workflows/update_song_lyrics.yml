@@ -28,6 +28,8 @@ jobs:
           skicka-tokencache-json: ${{ secrets.SKICKA_TOKENCACHE_JSON }}
           download-from: '/EasyslidesData/Admin/Databases/' 
           download-to: '${GITHUB_WORKSPACE}' # Adjust the path if needed
+          google-client-id: ${{ secrets.GOOGLE_CLIENT_ID }}
+          google-client-secret: ${{ secrets.GOOGLE_CLIENT_SECRET }}
 
       # Step 4: (Optional) Modify the downloaded file
       - name: Process the downloaded file
@@ -40,6 +42,8 @@ jobs:
           skicka-tokencache-json: ${{ secrets.SKICKA_TOKENCACHE_JSON }}
           upload-from: '${GITHUB_WORKSPACE}' 
           upload-to: '/ARCHIVED/test_github_action/' # Or the path to the modified file
+          google-client-id: ${{ secrets.GOOGLE_CLIENT_ID }}
+          google-client-secret: ${{ secrets.GOOGLE_CLIENT_SECRET }}
 
       # **IMPORTANT: Set up secrets**
       # You'll need to create secrets in your repository's settings to store 
