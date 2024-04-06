@@ -33,16 +33,15 @@ jobs:
 
       # Step 4: Modify the downloaded file
       - name: Process the downloaded file
-        run: cd ${GITHUB_WORKSPACE} && python convert_sql2docx.py
+        run: python convert_sql2docx.py
       - name: ls the workspace files
-        run: ls ${GITHUB_WORKSPACE}
+        run: ls .
 
       # Step 5: Upload to Google Drive 
       - name: Upload to Google Drive 
         uses: satackey/action-google-drive@v1
         with:
           skicka-tokencache-json: ${{ secrets.SKICKA_TOKENCACHE_JSON }}
-          upload-from: '${GITHUB_WORKSPACE}' 
           upload-to: '/ARCHIVED/test_github_action/' # Or the path to the modified file
           google-client-id: ${{ secrets.GOOGLE_CLIENT_ID }}
           google-client-secret: ${{ secrets.GOOGLE_CLIENT_SECRET }}
