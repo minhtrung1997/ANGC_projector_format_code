@@ -1,6 +1,6 @@
 name: Scheduled update of song lyrics daily
 
-# This workflow will trigger every day.
+# This workflow will trigger every day for testing skicka token expiry date from 19/4/2024.
 # To adjust the schedule, modify the cron expression.
 on:
   push:
