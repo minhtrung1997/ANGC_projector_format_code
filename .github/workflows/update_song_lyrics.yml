@@ -20,6 +20,12 @@ jobs:
       # Step 2: Install dependencies in requirements.txt
       - name: Install dependencies
         run: pip install -r requirements.txt
+      - name: Install GitHub CLI
+        run: |
+          sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-key C99B11DEB97541F0
+          sudo apt-add-repository https://cli.github.com/packages
+          sudo apt update
+          sudo apt install gh
 
       # Step 3: Setup rclone and Download from Google Drive
       - name: Setup Rclone
