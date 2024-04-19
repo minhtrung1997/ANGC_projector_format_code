@@ -27,16 +27,12 @@ jobs:
         with:
           rclone_config: ${{ secrets.RCLONE_CONFIG }}
           version: v1.65.1
-          disable_base64: true
       
       - name: Add Rclone service account file
         uses: AnimMouse/setup-rclone/service-account-file@v1
         with:
           service_account_filename: service-account-file.json
           service_account_file: ${{ secrets.SERVICE_ACCOUNT_FILE }}
-
-      - name: Reconnet to Google Drive
-        run: rclone config reconnect ANGC_gdrive:/ --auto-confirm
 
       - name: Download from Google Drive
         run: rclone copy --drive-root-folder-id 19RMEET6ArmcaRWPtqbDPia4ITZfnQ2Uj ANGC_gdrive:Admin/Databases/Dedupe_Pooled_Database_2023_curated.db ./download_db/ -P
