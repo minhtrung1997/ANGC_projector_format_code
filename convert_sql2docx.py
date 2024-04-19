@@ -35,7 +35,7 @@ for i in range(len(df)):
 
 # drop the contents column
 df = df.drop(columns = ['contents'])
-print(df)
+# print(df)
 
 
 # Now we need to reformat the dataframe and write it to a docx file
