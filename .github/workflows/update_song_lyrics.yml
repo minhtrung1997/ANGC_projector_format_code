@@ -27,6 +27,7 @@ jobs:
         with:
           rclone_config: ${{ secrets.RCLONE_CONFIG }}
           version: v1.65.1
+          disable_base64: true
       
       - name: Add Rclone service account file
         uses: AnimMouse/setup-rclone/service-account-file@v1
