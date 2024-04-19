@@ -7,7 +7,7 @@ on:
     branches:
       - main
   schedule:
-    - cron: '0 * * * *'
+    - cron: '0 0 * * SAT'
 
 jobs:
   update_song_lyrics:
@@ -41,7 +41,7 @@ jobs:
         with:
           skicka-tokencache-json: ${{ secrets.SKICKA_TOKENCACHE_JSON }}
           upload-from: './output/'
-          upload-to: '/ARCHIVED/test_github_action/' # Or the path to the modified file
+          upload-to: '/' # Or the path to the modified file
           google-client-id: ${{ secrets.GOOGLE_CLIENT_ID }}
           google-client-secret: ${{ secrets.GOOGLE_CLIENT_SECRET }}
 
