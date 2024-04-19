@@ -7,7 +7,7 @@ on:
     branches:
       - rclone-dev
   schedule:
-    - cron: '30 18 * * *'
+    - cron: '30 17 * * *'
 
 jobs:
   update_song_lyrics:
@@ -36,8 +36,6 @@ jobs:
 
       - name: Download from Google Drive
         env:
-            RCLONE_DRIVE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
-            RCLONE_DRIVE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
             RCLONE_DRIVE_SERVICE_ACCOUNT_FILE: ~/.config/rclone/service-account-file.json
         run: rclone copy --drive-root-folder-id 19RMEET6ArmcaRWPtqbDPia4ITZfnQ2Uj ANGC_gdrive:Admin/Databases/Dedupe_Pooled_Database_2023_curated.db ./download_db/ -P
 
@@ -46,7 +44,9 @@ jobs:
         run: python convert_sql2docx.py
 
       # Step 5: Upload to Google Drive 
-      - name: Upload to Google Drive 
+      - name: Upload to Google Drive
+        env:
+            RCLONE_DRIVE_SERVICE_ACCOUNT_FILE: ~/.config/rclone/service-account-file.json
         run: rclone copy --drive-root-folder-id 1-vqA0oX3GXE3EYhodg_FvPiAL1Ua-oZJ ./output/ ANGC_gdrive:test-rclone-dev/ -P
 
       # **IMPORTANT: Set up secrets**
