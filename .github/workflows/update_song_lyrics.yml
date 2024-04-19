@@ -35,6 +35,9 @@ jobs:
           service_account_file: ${{ secrets.SERVICE_ACCOUNT_FILE }}
 
       - name: Download from Google Drive
+        env:
+            RCLONE_DRIVE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+            RCLONE_DRIVE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
         run: rclone copy --drive-root-folder-id 19RMEET6ArmcaRWPtqbDPia4ITZfnQ2Uj ANGC_gdrive:Admin/Databases/Dedupe_Pooled_Database_2023_curated.db ./download_db/ -P
 
       # Step 4: Modify the downloaded file
