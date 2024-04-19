@@ -20,14 +20,13 @@ jobs:
       # Step 2: Install dependencies in requirements.txt
       - name: Install dependencies
         run: pip install -r requirements.txt
-      - name: export GitHub CLI alias for setup-rclone version script
-        run: alias gh='/usr/bin/gh'
 
       # Step 3: Setup rclone and Download from Google Drive
       - name: Setup Rclone
         uses: AnimMouse/setup-rclone@v1
         with:
           rclone_config: ${{ secrets.RCLONE_CONFIG }}
+          version: v1.65.1
       
       - name: Add Rclone service account file
         uses: AnimMouse/setup-rclone/service-account-file@v1
