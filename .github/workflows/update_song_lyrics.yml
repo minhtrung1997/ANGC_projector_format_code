@@ -7,7 +7,7 @@ on:
     branches:
       - rclone-dev
   schedule:
-    - cron: '5 18 * * *'
+    - cron: '0 17 * * *'
 
 jobs:
   update_song_lyrics:

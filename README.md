@@ -85,7 +85,7 @@ The Song Lyrics Converter project automates the conversion of SQL data into form
 
 | File                                                               | Summary                                                                                                     |
 | ---                                                                | ---                                                                                                         |
-| [update_song_lyrics.yml](.github/workflows/update_song_lyrics.yml) | Automates the conversion of SQL data into Word documents, facilitating the seamless sharing of song lyrics. |
+| [update_song_lyrics.yml](.github/workflows/update_song_lyrics.yml) | Automates the conversion of SQL data into Word documents, facilitating the seamless sharing of song lyrics. This version feature using rclone instead of skicka, potentially circumvent token expiry and also allow flexible later storage deployment (Onedrive, Dropbox,...) |
 
 </details>
 
