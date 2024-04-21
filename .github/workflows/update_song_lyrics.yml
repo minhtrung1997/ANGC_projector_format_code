@@ -40,8 +40,8 @@ jobs:
         uses: satackey/action-google-drive@v1
         with:
           skicka-tokencache-json: ${{ secrets.SKICKA_TOKENCACHE_JSON }}
-          upload-from: './output/test-main'
-          upload-to: '/Song_lyrics' # Or the path to the modified file
+          upload-from: './output/'
+          upload-to: '/Song_lyrics/test-main' # Or the path to the modified file
           google-client-id: ${{ secrets.GOOGLE_CLIENT_ID }}
           google-client-secret: ${{ secrets.GOOGLE_CLIENT_SECRET }}
 
