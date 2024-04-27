@@ -35,8 +35,9 @@ for i in range(len(df)):
 
 # drop the contents column
 df = df.drop(columns = ['contents'])
-# print(df)
-
+# Sort df by title1 alphabetically
+df = df.sort_values(by=['title1'])
+df = df.reset_index(drop=True)
 
 # Now we need to reformat the dataframe and write it to a docx file
 # The title1 will be the heading
