@@ -47,7 +47,7 @@ jobs:
       - name: Upload to Google Drive
         env:
             RCLONE_DRIVE_SERVICE_ACCOUNT_FILE: ~/.config/rclone/service-account-file.json
-        run: rclone copy --drive-root-folder-id 1-vqA0oX3GXE3EYhodg_FvPiAL1Ua-oZJ ./output/ ANGC_gdrive:test-rclone-dev/ -P
+        run: rclone copy --drive-root-folder-id 1-vqA0oX3GXE3EYhodg_FvPiAL1Ua-oZJ ./output/ ANGC_gdrive:/ -P
 
       # **IMPORTANT: Set up secrets**
       # You'll need to create secrets in your repository's settings to store 
