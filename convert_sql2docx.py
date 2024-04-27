@@ -35,8 +35,9 @@ for i in range(len(df)):
 
 # drop the contents column
 df = df.drop(columns = ['contents'])
-# print(df)
-
+# Sort df by title1 alphabetically
+df = df.sort_values(by=['title1'])
+df = df.reset_index(drop=True)
 
 # Now we need to reformat the dataframe and write it to a docx file
 # The title1 will be the heading
@@ -45,6 +46,8 @@ df = df.drop(columns = ['contents'])
 # Content1 will be in the left column and content2 will be in the right column
 
 doc = docx.Document()
+
+
 for i in range(len(df)):
     doc.add_heading(f"Song {i+1}: {df['title1'][i]}", level=1)
     doc.add_paragraph(df['title2'][i])
@@ -56,9 +59,63 @@ for i in range(len(df)):
     hdr_cells[1].text = df['content2'][i]
     
     doc.add_paragraph()
+
 # make sure the output folder exists
 import os
 if not os.path.exists('output'):
     os.makedirs('output')
 doc.save('output/Danh sách bài hát ANGC.docx')
 
+from docx import Document
+from docx.oxml.shared import OxmlElement, qn
+import lxml.etree
+from docx.oxml import parse_xml
+import subprocess
+
+def add_table_of_contents(document):
+    """Inserts a basic table of contents field into the given Word document."""
+    doc = document
+
+    # Add "Mục Lục" heading
+    heading = doc.add_heading('Mục Lục', level=1)._element
+    doc.element.body.insert(0, heading)
+
+    # Insert TOC field with instructions (Modified section)
+    toc = doc.add_paragraph()
+    run = toc.add_run()
+
+    # Add namespace declarations to each element where 'w' is used
+    fldChar = OxmlElement('w:fldChar')  # creates a new element
+    fldChar.set(qn('w:fldCharType'), 'begin')  # sets attribute on element
+    fldChar.set(qn('w:dirty'), 'true')
+    instrText = OxmlElement('w:instrText')
+    instrText.set(qn('xml:space'), 'preserve')  # sets attribute on element
+    instrText.text = r'TOC \o "1-3" \h \z \u'   # change 1-3 depending on heading levels you need
+
+    fldChar2 = OxmlElement('w:fldChar')
+    fldChar2.set(qn('w:fldCharType'), 'separate')
+    fldChar3 = OxmlElement('w:t')
+    fldChar3.text = "Right-click to update field."
+    fldChar2.append(fldChar3)
+
+    fldChar4 = OxmlElement('w:fldChar')
+    fldChar4.set(qn('w:fldCharType'), 'end')
+
+    r_element = run._r
+    r_element.append(fldChar)
+    r_element.append(instrText)
+    r_element.append(fldChar2)
+    r_element.append(fldChar4)
+
+    # Insert TOC at the first position
+    toc = toc._element
+    doc.element.body.insert(1, toc)
+
+    # Add a page break after the TOC
+    page_break = doc.add_page_break()._element
+    doc.element.body.insert(2, page_break)
+
+# Create or open an existing document
+doc = Document('output/Danh sách bài hát ANGC.docx')
+add_table_of_contents(doc)
+doc.save('output/Danh sách bài hát ANGC.docx')
