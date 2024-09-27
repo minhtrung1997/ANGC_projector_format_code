@@ -27,11 +27,14 @@ df['content1'] = ''
 df['content2'] = ''
 for i in range(len(df)):
     # check if contents has [region 2] marker if not then content1 equals contents and content2 equals ''
-    if '[region 2]' not in df['contents'][i]:
-        df['content1'][i] = df['contents'][i]
-        df['content2'][i] = ''
+    if '[region 2]' not in df.loc[i, 'contents']:
+        # df['content1'][i] = df['contents'][i]
+        # df['content2'][i] = ''
+        df.loc[i, 'content1'] = df.loc[i, 'contents']
+        df.loc[i, 'content2'] = ''
     else:
-        df['content1'][i], df['content2'][i] = convert_contents.main(df['contents'][i])
+        # df['content1'][i], df['content2'][i] = convert_contents.main(df['contents'][i])
+        df.loc[i, 'content1'], df.loc[i, 'content2'] = convert_contents.main(df.loc[i, 'contents'])
 
 # drop the contents column
 df = df.drop(columns = ['contents'])
@@ -119,3 +122,4 @@ def add_table_of_contents(document):
 doc = Document('output/Danh sách bài hát ANGC.docx')
 add_table_of_contents(doc)
 doc.save('output/Danh sách bài hát ANGC.docx')
+print("Finished creating the document")
