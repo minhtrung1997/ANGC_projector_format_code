@@ -19,6 +19,8 @@ sql_query = pd.read_sql_query('''
                                ''', conn)
 
 df = pd.DataFrame(sql_query, columns = ['title1', 'title2', 'contents'])
+# Remove if the contents is less than 10 characters
+df = df[df['contents'].str.len() > 15]
 
 # We will use the convert_contents.main function to parse the contents column
 # The function will split the contents into content1 and content2 and return them as a string
