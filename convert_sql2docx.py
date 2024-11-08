@@ -19,9 +19,10 @@ sql_query = pd.read_sql_query('''
                                ''', conn)
 
 df = pd.DataFrame(sql_query, columns = ['title1', 'title2', 'contents'])
-# Remove if the contents is less than 10 characters
+# Remove row if the contents column is less than 15 characters
 df = df[df['contents'].str.len() > 15]
-
+# reset the index
+df = df.reset_index(drop=True)
 # We will use the convert_contents.main function to parse the contents column
 # The function will split the contents into content1 and content2 and return them as a string
 # Create the new columns
@@ -52,6 +53,23 @@ df = df.reset_index(drop=True)
 
 doc = docx.Document()
 
+from docx.shared import RGBColor
+
+def add_text_with_color(cell, text):
+    parts = text.split('[')
+    for part in parts:
+        if ']' in part:
+            before_bracket, after_bracket = part.split(']', 1)
+            run = cell.paragraphs[0].add_run('[' + before_bracket + ']')
+            run.font.color.rgb = RGBColor(255, 0, 0)  # Red color
+            run.font.bold = True
+            run = cell.paragraphs[0].add_run(after_bracket)
+            run.font.color.rgb = RGBColor(0, 0, 0)  # Reset to black color
+            run.font.bold = False
+        else:
+            run = cell.paragraphs[0].add_run(part)
+            run.font.color.rgb = RGBColor(0, 0, 0)  # Ensure black color for non-bracket text
+            run.font.bold = False
 
 for i in range(len(df)):
     doc.add_heading(f"Song {i+1}: {df['title1'][i]}", level=1)
@@ -60,9 +78,11 @@ for i in range(len(df)):
     table.style = 'Table Grid'
     table.autofit = True
     hdr_cells = table.rows[0].cells
-    hdr_cells[0].text = df['content1'][i]
-    hdr_cells[1].text = df['content2'][i]
-    
+    # hdr_cells[0].text = df['content1'][i]
+    # hdr_cells[1].text = df['content2'][i]
+    add_text_with_color(hdr_cells[0], df['content1'][i])
+    add_text_with_color(hdr_cells[1], df['content2'][i])
+
     doc.add_paragraph()
 
 # make sure the output folder exists
