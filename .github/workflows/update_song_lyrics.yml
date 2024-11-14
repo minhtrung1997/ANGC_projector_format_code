@@ -7,7 +7,7 @@ on:
     branches:
       - main
   schedule:
-    - cron: '0 17 * * FRI'
+    - cron: "0 17 * * FRI"
 
 jobs:
   update_song_lyrics:
@@ -27,7 +27,7 @@ jobs:
         with:
           rclone_config: ${{ secrets.RCLONE_CONFIG }}
           version: v1.65.1
-      
+
       - name: Add Rclone service account file
         uses: AnimMouse/setup-rclone/service-account-file@v1
         with:
@@ -36,20 +36,20 @@ jobs:
 
       - name: Download from Google Drive
         env:
-            RCLONE_DRIVE_SERVICE_ACCOUNT_FILE: ~/.config/rclone/service-account-file.json
-        run: rclone copy --drive-root-folder-id 19RMEET6ArmcaRWPtqbDPia4ITZfnQ2Uj ANGC_gdrive:Admin/Databases/Dedupe_Pooled_Database_2023_curated.db ./download_db/ -P
+          RCLONE_DRIVE_SERVICE_ACCOUNT_FILE: ~/.config/rclone/service-account-file.json
+        run: rclone copy --drive-root-folder-id 11aZC65EoM5Jx--CpqiJ_uqWeDeEJgTSt ANGC_gdrive:Admin/Databases/Dedupe_Pooled_Database_2023_curated.db ./download_db/ -P
 
       # Step 4: Modify the downloaded file
       - name: Process the downloaded file
         run: python convert_sql2docx.py
 
-      # Step 5: Upload to Google Drive 
+      # Step 5: Upload to Google Drive
       - name: Upload to Google Drive
         env:
-            RCLONE_DRIVE_SERVICE_ACCOUNT_FILE: ~/.config/rclone/service-account-file.json
+          RCLONE_DRIVE_SERVICE_ACCOUNT_FILE: ~/.config/rclone/service-account-file.json
         run: rclone copy --drive-root-folder-id 1-vqA0oX3GXE3EYhodg_FvPiAL1Ua-oZJ ./output/ ANGC_gdrive:/ -P
 
       # **IMPORTANT: Set up secrets**
-      # You'll need to create secrets in your repository's settings to store 
-      # sensitive credentials for Google Drive authentication. 
+      # You'll need to create secrets in your repository's settings to store
+      # sensitive credentials for Google Drive authentication.
       # Refer to the documentation of the individual actions for details.
