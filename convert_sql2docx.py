@@ -2,10 +2,22 @@
 # It then reformat the dataframe and save it as a docx files
 
 import pandas as pd
-import argparse
-import docx
-import sqlite3
+import argparse, docx, sqlite3, re
 from local_function import convert_contents
+
+def is_hash_like(s):
+    # Define a regular expression pattern for a six-digit hexadecimal hash
+    pattern = r'^[0-9a-fA-F]{6}$'
+    # Use re.match to check if the string matches the pattern
+    return bool(re.match(pattern, s))
+def check_title_header(df):
+    # Drop rows where the first 6 characters of 'title1' are hash-like
+    df = df[~df['title1'].apply(lambda x: is_hash_like(x[:6]))]
+    # Remove row if the contents column is less than 15 characters
+    df = df[df['contents'].str.len() > 15]
+    # reset the index
+    df = df.reset_index(drop=True)
+    return df
 
 conn = sqlite3.connect('download_db/Dedupe_Pooled_Database_2023_curated.db')
 
@@ -19,10 +31,7 @@ sql_query = pd.read_sql_query('''
                                ''', conn)
 
 df = pd.DataFrame(sql_query, columns = ['title1', 'title2', 'contents'])
-# Remove row if the contents column is less than 15 characters
-df = df[df['contents'].str.len() > 15]
-# reset the index
-df = df.reset_index(drop=True)
+df = check_title_header(df)
 # We will use the convert_contents.main function to parse the contents column
 # The function will split the contents into content1 and content2 and return them as a string
 # Create the new columns
