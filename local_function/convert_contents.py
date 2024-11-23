@@ -1,4 +1,12 @@
 import re
+def remove_fault_brackets(input_string):
+    # Search the strings and convert the square brackets contain 'x' in to round brackets
+    pattern = r'\[(.*?)\]'
+    # Replace the square brackets containing 'x' with round brackets
+    output_string = re.sub(pattern, lambda x: f'({x.group(1)})' if 'x' in x.group(1) else x.group(0), input_string)
+
+    return output_string
+
 def extract_key_in_verse(input_string):
      # Regular expression pattern to find strings enclosed in square brackets
     pattern = r'\[(.*?)\]'
@@ -71,7 +79,9 @@ def cat_list_to_string(input_list):
     output_string = re.sub(r'\n\s+', '\n', output_string)
     return output_string
 
-def main(input_string):
+def main(raw_input_string):
+    # Remove the fault brackets
+    input_string = remove_fault_brackets(raw_input_string)
     # Extract the key string
     key = extract_key_in_verse(input_string)
     # Split the string into verses
