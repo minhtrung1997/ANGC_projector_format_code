@@ -35,49 +35,67 @@ def split_content_into_verse(input_string):
     except Exception as e:
         print(f"An error occured: {e}, check the input string or database")
 
-def split_verse_into_region(verse,content1_df,content2_df):
+def split_and_alternate_verse(verse, content_all):
     try:
         # Check if the verse has the region 2 marker
         if '[region 2]' not in verse:
-            content1_df.append(verse)
-            # Content2 append a number of new lines equal to the number of lines in content1
-            content2_df.append('\n' * verse.count('\n'))
-            return content1_df,content2_df
+            content_all.append(verse)
+            return content_all
+
         # Split the verse at the region 2 marker
         parts = re.split(r'(\[region 2\])', verse)
-        # print(parts)
-        # Remove any empty strings leading and trailing element in part[0] and part[2]
+
+        # Remove any empty strings and strip leading/trailing whitespace
         parts[0] = parts[0].strip()
         parts[2] = parts[2].strip()
 
-        # if start of part[0] iis \n then remove it
-        if parts[0][0] == '\n':
-            parts[0] = parts[0][1:]
-        # Append the first part to the content1 list
-        if parts[0][-1] != '\n':
-            parts[0] = parts[0] + '\n'
-        content1_df.append(parts[0])
+        # Ensure parts[0] ends with a newline
+        if parts[0] and parts[0][-1] != '\n':
+            parts[0] += '\n'
 
-        if parts[2][0] == '\n':
-            parts[2] = parts[2][1:]
-        # Append the key string of the verse to part[2] if extract_key_in_verse(parts[0]) is not empty
-        if extract_key_in_verse(parts[0]):
-            parts[2] = f"[{extract_key_in_verse(parts[0])[0]}]\n" + parts[2]
-        # If end of part[2] is not \n then add it
-        if parts[2][-1] != '\n':
-            parts[2] = parts[2] + '\n'
-        # Append the second part to the content2 list
-        content2_df.append(parts[2])
-        return content1_df,content2_df
+        # Ensure parts[2] starts and ends with a newline
+        if parts[2] and parts[2][0] != '\n':
+            parts[2] = '\n' + parts[2]
+        if parts[2] and parts[2][-1] != '\n':
+            parts[2] += '\n'
+
+        # Split parts[0] and parts[2] into lines
+        part0_lines = parts[0].split('\n')
+        part2_lines = parts[2].split('\n')
+
+        # Alternate lines from part0_lines and part2_lines
+        for i in range(max(len(part0_lines), len(part2_lines))):
+            if i < len(part0_lines) and part0_lines[i].strip():
+                content_all.append(part0_lines[i] + '\n')
+            if i < len(part2_lines) and part2_lines[i].strip():
+                content_all.append(part2_lines[i] + '\n\n')
+        return content_all
     except Exception as e:
-        print(f"An error occured: {e}, check the input string or database")
+        print(f"An error occurred: {e}, check the input string or database")
 
 def cat_list_to_string(input_list):
     # Concatenate the list to a string
     output_string = ''.join(input_list)
     # Remove empty spaces trailing the \n in the string
-    output_string = re.sub(r'\n\s+', '\n', output_string)
+    # output_string = re.sub(r'\n\s+', '\n', output_string)
     return output_string
+
+def harmonize_key_propresent(final_string):
+    """
+    Harmonize the key from EZ Slide to Propresent by
+    [1] to [verse 1]
+    [2] to [verse 2]
+    ... so on, when the key is number
+    """
+    # Regular expression pattern to find strings enclosed in square brackets
+    pattern = r'\[(.*?)\]'
+    # Find all [1], [2], [3]... in the string
+    matches = re.findall(pattern, final_string)
+    # Harmonize the key from EZ Slide to Propresent
+    for match in matches:
+        if match.isdigit():
+            final_string = re.sub(r'\[' + match + r'\]', f'[verse {match}]', final_string)
+    return final_string
 
 def main(raw_input_string):
     # Remove the fault brackets
@@ -87,15 +105,15 @@ def main(raw_input_string):
     # Split the string into verses
     verses = split_content_into_verse(input_string)
     # Initialize the content1 and content2 list
-    content1 = []
-    content2 = []
+    content_all = []
     # Split the verse into content1 and content2
     for verse in verses:
-        content1,content2 = split_verse_into_region(verse,content1,content2)
+        content_all = split_and_alternate_verse(verse, content_all)
     # Concatenate the content1 and content2 list to string
-    content1 = cat_list_to_string(content1)
-    content2 = cat_list_to_string(content2)
-    return content1,content2
+    output_string = cat_list_to_string(content_all)
+    # Harmonize the key from EZ Slide to Propresent
+    output_string = harmonize_key_propresent(output_string)
+    return output_string
 
 # Test the function
 if __name__ == '__main__':
