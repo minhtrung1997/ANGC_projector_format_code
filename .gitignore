@@ -2,6 +2,5 @@
 *.pdf
 *.rtf
 __pycache__/
-*.db
 *.json
 *.js
