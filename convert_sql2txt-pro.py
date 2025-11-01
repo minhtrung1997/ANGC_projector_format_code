@@ -37,7 +37,8 @@ df = check_title_header(df)
 # Create the new columns
 df['new_contents'] = ''
 for i in range(len(df)):
-    df.loc[i, 'new_contents'] = convert_contents.main(df.loc[i, 'contents'])
+    # Pass the song title to the main function for warning messages
+    df.loc[i, 'new_contents'] = convert_contents.main(df.loc[i, 'contents'], df.loc[i, 'title1'])
 
 # drop the contents column
 df = df.drop(columns = ['contents'])

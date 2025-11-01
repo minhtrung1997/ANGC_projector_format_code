@@ -97,7 +97,76 @@ def harmonize_key_propresent(final_string):
             final_string = re.sub(r'\[' + match + r'\]', f'[verse {match}]', final_string)
     return final_string
 
-def main(raw_input_string):
+def map_keys_to_propresenter(final_string, song_title="Unknown"):
+    """
+    Map EasySlide keys to ProPresenter/FreeShow format.
+    Raises warning if unknown keys are found.
+    
+    Mapping:
+    intro --> Intro
+    ending --> Ending
+    chorus --> Chorus
+    chorus 2 --> Chorus_2
+    bridge --> Bridge
+    Bridge2 --> Bridge_2
+    Bridge3 --> Bridge_3
+    tag --> Tag
+    prechorus --> Pre-chorus
+    prechorus 2 --> Pre-chorus_2
+    1 --> Verse_1
+    2 --> Verse_2
+    3 --> Verse_3
+    4 --> Verse_4
+    """
+    # Define the mapping dictionary (case-insensitive keys)
+    key_mapping = {
+        'intro': 'Intro',
+        'ending': 'Ending',
+        'chorus': 'Chorus',
+        'chorus 2': 'Chorus_2',
+        'bridge': 'Bridge',
+        'bridge 2': 'Bridge_2',
+        'bridge 3': 'Bridge_3',
+        'tag': 'Tag',
+        'prechorus': 'Pre-chorus',
+        'prechorus 2': 'Pre-chorus_2',
+        '1': 'Verse_1',
+        '2': 'Verse_2',
+        '3': 'Verse_3',
+        '4': 'Verse_4',
+        'verse 1': 'Verse_1',
+        'verse 2': 'Verse_2',
+        'verse 3': 'Verse_3',
+        'verse 4': 'Verse_4',
+    }
+    
+    # Regular expression pattern to find strings enclosed in square brackets
+    pattern = r'\[(.*?)\]'
+    matches = re.findall(pattern, final_string)
+    
+    # Track unknown keys
+    unknown_keys = []
+    
+    # Replace each key with its mapped version
+    for match in matches:
+        match_lower = match.lower()
+        if match_lower in key_mapping:
+            final_string = re.sub(
+                r'\[' + re.escape(match) + r'\]',
+                f'[{key_mapping[match_lower]}]',
+                final_string
+            )
+        else:
+            # Unknown key found
+            unknown_keys.append(match)
+    
+    # Raise warning for unknown keys
+    if unknown_keys:
+        print(f"⚠️  WARNING: Song '{song_title}' contains unknown keys: {unknown_keys}")
+    
+    return final_string
+
+def main(raw_input_string, song_title="Unknown"):
     # Remove the fault brackets
     input_string = remove_fault_brackets(raw_input_string)
     # Extract the key string
@@ -111,8 +180,10 @@ def main(raw_input_string):
         content_all = split_and_alternate_verse(verse, content_all)
     # Concatenate the content1 and content2 list to string
     output_string = cat_list_to_string(content_all)
-    # Harmonize the key from EZ Slide to Propresent
+    # Harmonize the key from EZ Slide to Propresent (legacy function)
     output_string = harmonize_key_propresent(output_string)
+    # Map keys to ProPresenter/FreeShow format
+    output_string = map_keys_to_propresenter(output_string, song_title)
     return output_string
 
 # Test the function
