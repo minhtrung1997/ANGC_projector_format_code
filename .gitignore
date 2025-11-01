@@ -5,3 +5,7 @@ __pycache__/
 *.json
 *.js
 output_txt/
+aws*
+*.pem
+download_db/
+*.csv
