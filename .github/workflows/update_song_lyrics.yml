@@ -8,6 +8,7 @@ on:
       - main
   schedule:
     - cron: "0 17 * * FRI"
+  workflow_dispatch:
 
 jobs:
   update_song_lyrics:
