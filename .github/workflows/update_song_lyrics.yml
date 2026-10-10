@@ -13,11 +13,13 @@ on:
 jobs:
   update_song_lyrics:
     runs-on: ubuntu-latest
-    container:
-      image: python:3.8
     steps:
       # Step 1: Check out your repository
       - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.8"
       # Step 2: Install dependencies in requirements.txt
       - name: Install dependencies
         run: pip install -r requirements.txt
