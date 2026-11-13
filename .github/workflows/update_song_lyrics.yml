@@ -12,7 +12,7 @@ on:
 
 jobs:
   update_song_lyrics:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       # Step 1: Check out your repository
       - uses: actions/checkout@v4
