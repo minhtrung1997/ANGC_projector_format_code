@@ -10,6 +10,9 @@ on:
     - cron: "0 17 * * FRI"
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
   update_song_lyrics:
     runs-on: ubuntu-24.04
